@@ -1,42 +1,82 @@
-# sv
+# Rock, Paper, Scissors
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+[Português (Brasil)](README-ptbr.md)
 
-## Creating a project
+A responsive Rock, Paper, Scissors game. This project was built from Frontend Mentor's [Rock, Paper, Scissors](https://www.frontendmentor.io/challenges/rock-paper-scissors-game-pTgwgvgH) challenge.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- Lets users choose between Rock, Paper, and Scissors.
+- Generates a random choice for the house.
+- Determines whether the player wins, loses, or draws each round.
+- Updates the score based on the result.
+- Includes animated transitions between game states.
+- Animates the house choice reveal and round result.
+- Highlights the winning choice with visual rings.
+- Includes a responsive rules modal.
+- Provides layouts optimized for both desktop and mobile devices.
 
-To recreate this project with the same configuration:
+## Tech stack
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:none" --install npm rock-paper-scissors
-```
+- [SvelteKit](https://svelte.dev/docs/kit) and [TypeScript](https://www.typescriptlang.org/)
+- [Svelte](https://svelte.dev/) for components, state, and transitions
+- [Tailwind CSS](https://tailwindcss.com/) for styling
 
-## Developing
+## Run locally
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Prerequisites
 
-```sh
+- [Node.js](https://nodejs.org/) 20 or newer
+- npm
+
+### Installation
+
+```bash
+git clone git@github.com:code-luanhs/rock-paper-scissors.git
+cd rock-paper-scissors
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Then open the URL shown by SvelteKit, usually `http://localhost:5173`.
 
-To create a production version of your app:
+## Available scripts
 
-```sh
-npm run build
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Starts the development server. |
+| `npm run build` | Creates a production build. |
+| `npm run preview` | Serves the production build locally. |
+| `npm run check` | Runs Svelte and TypeScript diagnostics. |
+| `npm run lint` | Runs static analysis with ESLint and formatting checks. |
+| `npm run format` | Formats the project with Prettier. |
+
+## Project structure
+
+```text
+src/
+├── lib/
+│   ├── assets/          # Images and icons
+│   ├── components/      # Game and UI components
+│   └── game/            # Game types and business logic
+├── routes/
+│   ├── +layout.svelte   # Global layout and styles
+│   └── +page.svelte     # Game state and round flow
+└── app.css              # Global styles and Tailwind configuration
 ```
 
-You can preview the production build with `npm run preview`.
+## Game flow
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Each round moves through a small set of game states:
+
+1. The player chooses Rock, Paper, or Scissors.
+2. The game waits before revealing the house choice.
+3. The house randomly chooses one of the three options.
+4. The winner is determined and the score is updated.
+5. The player can start another round with **Play Again**.
+
+The game rules and result calculation are kept separate from the UI components in `src/lib/game`.
+
+## Author
+
+Built by [Luan Henrique](https://github.com/code-luanhs).
