@@ -59,6 +59,14 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Rock, Paper, Scissors | Luan Henrique</title>
+
+	<meta name="description" content="A responsive Rock, Paper, Scissors game built with SvelteKit, TypeScript and Tailwind CSS." />
+	<meta name="author" content="Luan Henrique" />
+	<meta name="robots" content="index, follow" />
+</svelte:head>
+
 <Header {score} />
 
 <main class="relative mx-auto mt-12 min-h-[430px] w-full overflow-x-clip sm:mt-16 sm:min-h-[500px]">
