@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cubicOut } from 'svelte/easing';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import { scale } from 'svelte/transition';
 
 	import Header from '$lib/components/Header.svelte';
@@ -19,6 +20,16 @@
 	let score = $state(0);
 
 	const screen = $derived(status === 'choosing' ? 'board' : 'result');
+	const reveal = $derived(
+		prefersReducedMotion.current
+			? { start: 0.95, duration: 0, easing: cubicOut }
+			: { start: 0.95, duration: 500, easing: cubicOut }
+	);
+	const conceal = $derived(
+		prefersReducedMotion.current
+			? { start: 0.95, duration: 0, easing: cubicOut }
+			: { start: 0.95, duration: 300, easing: cubicOut }
+	);
 
 	async function handleSelect(choice: Choice) {
 		playerChoice = choice;
@@ -62,28 +73,25 @@
 <svelte:head>
 	<title>Rock, Paper, Scissors | Luan Henrique</title>
 
-	<meta name="description" content="A responsive Rock, Paper, Scissors game built with SvelteKit, TypeScript and Tailwind CSS." />
+	<meta
+		name="description"
+		content="A responsive Rock, Paper, Scissors game built with SvelteKit, TypeScript and Tailwind CSS."
+	/>
 	<meta name="author" content="Luan Henrique" />
 	<meta name="robots" content="index, follow" />
 </svelte:head>
 
 <Header {score} />
 
+<p aria-live="polite" class="sr-only">
+	{#if status === 'result' && result && playerChoice && houseChoice}
+		You picked {playerChoice}. The house picked {houseChoice}. You {result}. Score is {score}.
+	{/if}
+</p>
+
 <main class="relative mx-auto mt-12 min-h-[430px] w-full overflow-x-clip sm:mt-16 sm:min-h-[500px]">
 	{#key screen}
-		<div
-			in:scale={{
-				start: 0.95,
-				duration: 500,
-				easing: cubicOut
-			}}
-			out:scale={{
-				start: 0.95,
-				duration: 300,
-				easing: cubicOut
-			}}
-			class="absolute inset-0"
-		>
+		<div in:scale={reveal} out:scale={conceal} class="absolute inset-0">
 			{#if status === 'choosing'}
 				<GameBoard onSelect={handleSelect} />
 			{:else}

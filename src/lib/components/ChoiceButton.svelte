@@ -37,22 +37,32 @@
 	>;
 
 	const currentChoice = $derived(choices[choice]);
-</script>
-
-<button
-	type="button"
-	onclick={() => onSelect?.(choice)}
-	disabled={!interactive}
-	aria-label={interactive ? `Choose ${choice}` : undefined}
-	class={[
+	const shell = $derived([
 		'flex size-32.5 items-center justify-center rounded-full p-4 sm:size-50 sm:p-6',
 		interactive && 'cursor-pointer',
 		currentChoice.style
-	]}
->
+	]);
+</script>
+
+{#snippet face()}
 	<span
 		class="flex size-full items-center justify-center rounded-full bg-gray-100 shadow-[inset_0_7px_0_#c8cbd6]"
 	>
 		<img src={currentChoice.icon} alt="" class="w-12 sm:w-18.75" />
 	</span>
-</button>
+{/snippet}
+
+{#if interactive}
+	<button
+		type="button"
+		onclick={() => onSelect?.(choice)}
+		aria-label={`Choose ${choice}`}
+		class={shell}
+	>
+		{@render face()}
+	</button>
+{:else}
+	<div class={shell}>
+		{@render face()}
+	</div>
+{/if}

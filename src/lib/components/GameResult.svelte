@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { scale } from 'svelte/transition';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import ChoiceButton from './ChoiceButton.svelte';
 	import type { Choice, GameResult as GameResultType, GameStatus } from '$lib/game/types';
 
@@ -23,6 +24,30 @@
 
 	const playerWon = $derived(status === 'result' && result === 'win');
 	const houseWon = $derived(status === 'result' && result === 'lose');
+	const pickReveal = $derived(
+		prefersReducedMotion.current ? { start: 0.8, duration: 0 } : { start: 0.8, duration: 400 }
+	);
+	const houseReveal = $derived(
+		prefersReducedMotion.current ? { start: 0, duration: 0 } : { start: 0, duration: 600 }
+	);
+	const resultReveal = $derived(
+		prefersReducedMotion.current ? { start: 0, duration: 0 } : { start: 0, duration: 500 }
+	);
+	const outerRing = $derived(
+		prefersReducedMotion.current ? { start: 0.7, duration: 0 } : { start: 0.7, duration: 700 }
+	);
+	const middleRing = $derived(
+		prefersReducedMotion.current ? { start: 0.7, duration: 0 } : { start: 0.7, duration: 600 }
+	);
+	const innerRing = $derived(
+		prefersReducedMotion.current ? { start: 0.7, duration: 0 } : { start: 0.7, duration: 500 }
+	);
+
+	let playAgain: HTMLButtonElement | undefined = $state();
+
+	$effect(() => {
+		if (status === 'result') playAgain?.focus();
+	});
 </script>
 
 <div
@@ -43,22 +68,22 @@
 
 		{#if playerChoice}
 			<div
-				in:scale={{ start: 0.8, duration: 400 }}
+				in:scale={pickReveal}
 				class="relative order-1 flex items-center justify-center sm:order-2"
 			>
 				{#if playerWon}
 					<div
-						in:scale={{ start: 0.7, duration: 700 }}
+						in:scale={outerRing}
 						class="pointer-events-none absolute size-65 rounded-full bg-white/2 sm:size-125"
 					></div>
 
 					<div
-						in:scale={{ start: 0.7, duration: 600 }}
+						in:scale={middleRing}
 						class="pointer-events-none absolute size-52.5 rounded-full bg-white/3 sm:size-100"
 					></div>
 
 					<div
-						in:scale={{ start: 0.7, duration: 500 }}
+						in:scale={innerRing}
 						class="pointer-events-none absolute size-42.5 rounded-full bg-white/4 sm:size-75"
 					></div>
 				{/if}
@@ -73,7 +98,7 @@
 	<!-- Result -->
 	{#if status === 'result' && result}
 		<div
-			in:scale={{ start: 0, duration: 500 }}
+			in:scale={resultReveal}
 			class="relative z-20 col-span-2 row-start-2 mt-16 flex flex-col items-center sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:mt-0"
 		>
 			<h2 class="text-5xl font-bold whitespace-nowrap text-white">
@@ -81,6 +106,7 @@
 			</h2>
 
 			<button
+				bind:this={playAgain}
 				type="button"
 				onclick={onPlayAgain}
 				class="mt-5 min-w-55 cursor-pointer rounded-lg bg-white px-8 py-4 font-semibold tracking-[0.15em] text-navy-900"
@@ -99,21 +125,21 @@
 		</h2>
 
 		{#if houseChoice}
-			<div in:scale={{ start: 0, duration: 600 }} class="order-1 sm:order-2">
+			<div in:scale={houseReveal} class="order-1 sm:order-2">
 				<div class="relative flex items-center justify-center">
 					{#if houseWon}
 						<div
-							in:scale={{ start: 0.7, duration: 700 }}
+							in:scale={outerRing}
 							class="pointer-events-none absolute size-65 rounded-full bg-white/2 sm:size-125"
 						></div>
 
 						<div
-							in:scale={{ start: 0.7, duration: 600 }}
+							in:scale={middleRing}
 							class="pointer-events-none absolute size-52.5 rounded-full bg-white/3 sm:size-100"
 						></div>
 
 						<div
-							in:scale={{ start: 0.7, duration: 500 }}
+							in:scale={innerRing}
 							class="pointer-events-none absolute size-42.5 rounded-full bg-white/4 sm:size-75"
 						></div>
 					{/if}
